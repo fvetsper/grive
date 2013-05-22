@@ -17,54 +17,38 @@
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 #pragma once
 
+#include <sys/inotify.h>
+#include <stdio.h>
+
+#include "http/Agent.hh"
 #include "State.hh"
+#include "Entry.hh"
 
-#include "http/Header.hh"
-#include "protocol/Json.hh"
-#include "util/Exception.hh"
+namespace gr { namespace v1 {
 
-#include <string>
-#include <vector>
+class NotifyEventsHandler {
+public:
+	NotifyEventsHandler(State state, http::Agent * http);
 
-namespace gr {
+	void get_event (int fd, const std::string& target);
+	void init();
 
-namespace http
-{
-	class Agent ;
-}
 
-namespace v1 {
+	virtual ~NotifyEventsHandler();
 
-class Entry ;
+private:
+	State m_state;
+	http::Agent * m_http;
 
-class Drive
-{
-public :
-	Drive( http::Agent *agent, const Json& options ) ;
+	static const int BUFF_SIZE = (sizeof(struct inotify_event)+FILENAME_MAX)*1024;
 
-	void DetectChanges() ;
-	void Update() ;
-	void DryRun() ;
-	void SaveState() ;
-	void startLocalChangesListener();
-	
-	struct Error : virtual Exception {} ;
-	
-private :
-	void SyncFolders( ) ;
-    void file();
-	void FromRemote( const Entry& entry ) ;
-	void FromChange( const Entry& entry ) ;
-	void UpdateChangeStamp( ) ;
-	
-private :
-	http::Agent 	*m_http ;
-	std::string		m_resume_link ;
-	fs::path		m_root ;
-	State			m_state ;
-	Json			m_options ;
-} ;
+	void handle_error (int error);
 
-} } // end of namespace
+
+
+};
+
+} }

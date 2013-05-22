@@ -311,6 +311,7 @@ void Resource::AddChild( Resource *child )
 	assert( child != this ) ;
 
 	child->m_parent = this ;
+	unsigned int size = m_child.size();
 	m_child.push_back( child ) ;
 }
 

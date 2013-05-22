@@ -22,6 +22,7 @@
 #include "CommonUri.hh"
 #include "Entry.hh"
 #include "Feed.hh"
+#include "LocalChangesListener.hh"
 
 #include "http/Agent.hh"
 #include "http/ResponseLog.hh"
@@ -195,6 +196,12 @@ void Drive::UpdateChangeStamp( )
 	// maybe by recording the updated timestamp and compare it?
 	m_state.ChangeStamp( 
 		std::atoi(xrsp.Response()["docs:largestChangestamp"]["@value"].front().Value().c_str()) ) ;
+}
+
+void Drive::startLocalChangesListener()
+{
+	LocalChangesListener * listener = new LocalChangesListener (m_state, m_http);
+	listener->start();
 }
 
 } } // end of namespace gr::v1

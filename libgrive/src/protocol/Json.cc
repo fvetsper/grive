@@ -144,6 +144,30 @@ Json::Json( const boost::uint64_t& l ) :
 }
 
 template <>
+Json::Json( const long& l ) :
+	m_json( ::json_object_new_int64( l ) )
+{
+	if ( m_json == 0 )
+		BOOST_THROW_EXCEPTION(
+			Error()
+				<< JsonCApi_( "json_object_new_int64" )
+				<< ValueErr( l )
+		) ;
+}
+
+template <>
+Json::Json( const unsigned long& l ) :
+	m_json( ::json_object_new_int64( l ) )
+{
+	if ( m_json == 0 )
+		BOOST_THROW_EXCEPTION(
+			Error()
+				<< JsonCApi_( "json_object_new_int64" )
+				<< ValueErr( l )
+		) ;
+}
+
+template <>
 Json::Json( const std::vector<Json>& arr ) :
 	m_json( ::json_object_new_array( ) )
 {

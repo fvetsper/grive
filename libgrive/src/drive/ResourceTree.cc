@@ -111,6 +111,13 @@ const Resource* ResourceTree::FindByHref( const std::string& href ) const
 	return i != map.end() ? *i : 0 ;
 }
 
+Resource* ResourceTree::FindByName( const std::string& name ) const
+{
+	const NameMap& map = m_set.get<ByName>() ;
+	NameMap::const_iterator i = map.find( name ) ;
+	return i != map.end() ? *i : 0 ;
+}
+
 ///	Reinsert should be called when the ID/HREF were updated
 bool ResourceTree::ReInsert( Resource *coll )
 {

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 # Grive version. remember to update it for every new release!
 set( GRIVE_VERSION "0.3.0-pre" )
+set( CMAKE_CXX_FLAGS "-lpthread -g -Wall")
 
 # common compile options
 add_definitions( -DVERSION="${GRIVE_VERSION}" )

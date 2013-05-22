@@ -40,18 +40,21 @@ namespace details
 	struct ByID {} ;
 	struct ByHref {} ;
 	struct ByIdentity {} ;
+	struct ByName {} ;
 
 	typedef multi_index_container<
 		Resource*,
 		indexed_by<
 			hashed_non_unique<tag<ByHref>,	const_mem_fun<Resource, std::string,	&Resource::SelfHref> >,
 			hashed_non_unique<tag<ByID>,	const_mem_fun<Resource, std::string,	&Resource::ResourceID> >,
+			hashed_non_unique<tag<ByName>,	const_mem_fun<Resource, std::string,	&Resource::Name> >,
 			hashed_unique<tag<ByIdentity>,	identity<Resource*> >
 		>
 	> Folders ;
 	
 	typedef Folders::index<ByID>::type			IDMap ;
 	typedef Folders::index<ByHref>::type		HrefMap ;
+	typedef Folders::index<ByName>::type		NameMap ;
 	typedef Folders::index<ByIdentity>::type	Set ;
 }
 
@@ -75,6 +78,8 @@ public :
 	
 	Resource* FindByHref( const std::string& href ) ;
 	const Resource* FindByHref( const std::string& href ) const ;
+
+	Resource* FindByName( const std::string& name ) const ;
 
 	Resource* FindByID( const std::string& id ) ;
 	

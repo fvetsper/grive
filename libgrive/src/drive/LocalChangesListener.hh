@@ -17,54 +17,35 @@
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+
 #pragma once
 
-#include "State.hh"
 
-#include "http/Header.hh"
-#include "protocol/Json.hh"
-#include "util/Exception.hh"
-
+#include <pthread.h>
 #include <string>
-#include <vector>
+#include <cstring>
+#include <errno.h>
+#include <stdio.h>
 
-namespace gr {
+#include "http/Agent.hh"
+#include "State.hh"
+#include "NotifyEventsHandler.hh"
 
-namespace http
+namespace gr { namespace v1 {
+
+class LocalChangesListener
 {
-	class Agent ;
-}
+public:
+	LocalChangesListener(State& state, http::Agent * http);
+	~LocalChangesListener();
+	void start ();
 
-namespace v1 {
+private:
+	pthread_t thread;
 
-class Entry ;
+	NotifyEventsHandler events;
 
-class Drive
-{
-public :
-	Drive( http::Agent *agent, const Json& options ) ;
+	static void * run(void * ptr);
+};
 
-	void DetectChanges() ;
-	void Update() ;
-	void DryRun() ;
-	void SaveState() ;
-	void startLocalChangesListener();
-	
-	struct Error : virtual Exception {} ;
-	
-private :
-	void SyncFolders( ) ;
-    void file();
-	void FromRemote( const Entry& entry ) ;
-	void FromChange( const Entry& entry ) ;
-	void UpdateChangeStamp( ) ;
-	
-private :
-	http::Agent 	*m_http ;
-	std::string		m_resume_link ;
-	fs::path		m_root ;
-	State			m_state ;
-	Json			m_options ;
-} ;
-
-} } // end of namespace
+} }

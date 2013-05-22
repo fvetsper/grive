@@ -215,6 +215,11 @@ Resource* State::FindByHref( const std::string& href )
 	return m_res.FindByHref( href ) ;
 }
 
+Resource* State::FindByName( const std::string& name )
+{
+	return m_res.FindByName(name);
+}
+
 State::iterator State::begin()
 {
 	return m_res.begin() ;
@@ -292,6 +297,16 @@ void State::ChangeStamp( long cstamp )
 {
 	Log( "change stamp is set to %1%", cstamp, log::verbose ) ;
 	m_cstamp = cstamp ;
+}
+
+void State::AddNewResource(http::Agent *http, const std::string& fname)
+{
+    Resource* folder = m_res.Root();
+    Resource* c = new Resource( fname, "file" ) ;
+    folder->AddChild(c);
+    m_res.Insert(c);
+
+    c->Create(http);
 }
 
 } } // end of namespace gr::v1

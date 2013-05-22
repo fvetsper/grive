@@ -79,6 +79,7 @@ public :
 
 	void FromRemote( const Entry& remote, const DateTime& last_sync ) ;
 	void FromLocal( const DateTime& last_sync ) ;
+	void DeleteRemote( http::Agent* http ) ;
 	
 	void Sync( http::Agent* http, DateTime& sync_time, const Json& options ) ;
 
@@ -89,6 +90,8 @@ public :
 	
 	std::string StateStr() const ;
 	
+	bool Create( http::Agent* http ) ;
+
 private :
 	/// State of the resource. indicating what to do with the resource
 	enum State
@@ -129,14 +132,13 @@ private :
 
 	void Download( http::Agent* http, const fs::path& file ) const ;
 	bool EditContent( http::Agent* http, bool new_rev ) ;
-	bool Create( http::Agent* http ) ;
+
 	bool Upload( http::Agent* http, const std::string& link, bool post ) ;
 	
 	void FromRemoteFolder( const Entry& remote, const DateTime& last_sync ) ;
 	void FromRemoteFile( const Entry& remote, const DateTime& last_sync ) ;
 	
 	void DeleteLocal() ;
-	void DeleteRemote( http::Agent* http ) ;
 	
 	void AssignIDs( const Entry& remote ) ;
 	void SyncSelf( http::Agent* http, const Json& options ) ;

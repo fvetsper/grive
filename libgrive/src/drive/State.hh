@@ -53,11 +53,15 @@ public :
 	void FromRemote( const Entry& e ) ;
 	void ResolveEntry() ;
 	
+	void AddNewResource(http::Agent *http, const std::string& fname);
+
 	void Read( const fs::path& filename ) ;
 	void Write( const fs::path& filename ) const ;
 
 	Resource* FindByHref( const std::string& href ) ;
 	Resource* FindByID( const std::string& id ) ;
+	Resource* FindByName( const std::string& name ) ;
+
 
 	void Sync( http::Agent *http, const Json& options ) ;
 	

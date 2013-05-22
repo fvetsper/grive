@@ -186,6 +186,8 @@ int Main( int argc, char **argv )
 	AuthAgent agent( token, std::auto_ptr<http::Agent>( new http::CurlAgent ) ) ;
 
 	Drive drive( &agent, config.GetAll() ) ;
+
+	// sync on startup
 	drive.DetectChanges() ;
 
 	if ( vm.count( "dry-run" ) == 0 )
@@ -194,9 +196,16 @@ int Main( int argc, char **argv )
 		drive.SaveState() ;
 	}
 	else
+	{
 		drive.DryRun() ;
+	}
 	
+	// Detect local changes events
+	drive.startLocalChangesListener();
+
 	config.Save() ;
+
+	while(true){};
 	Log( "Finished!", log::info ) ;
 	return 0 ;
 }
